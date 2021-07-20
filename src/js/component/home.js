@@ -12,43 +12,64 @@ export function Home() {
 		"Do Laundry",
 		"Walk the Dog"
 	]);
+	const [isShown, setIsShown] = useState({
+		state: false,
+		index: 0
+	});
+
+	const apiURL =
+		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
+
+	fetch(apiURL)
+		.then(response => response.json())
+		.then(data => console.log(data));
 
 	let todo = variable.map((item, i) => {
 		return (
-			<li key={i}>
-				{item}
-				<button onClick={() => removeItem(i)}>X</button>
-			</li>
+			<div className="repeating" key={i}>
+				<li
+					onMouseEnter={() => setIsShown({ state: true, index: i })}
+					onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
+					{item}
+
+					{isShown.state === true && isShown.index === i ? (
+						<button setonClick={() => removeItem(i)}>X</button>
+					) : (
+						""
+					)}
+				</li>
+			</div>
 		);
 	});
 
 	const removeItem = index => {
-		console.log(index);
 		const newArray = variable.filter((item, i) => i != index);
 		setVariable(newArray);
 	};
 
 	const newTodo = onKeyDownEvent => {
-		console.log(onKeyDownEvent);
 		if (onKeyDownEvent.keyCode === 13) {
 			let userInput = onKeyDownEvent.target.value;
-			const newTodo = [...todo, userInput];
+			const newTodo = [...variable, userInput];
 			setVariable(newTodo);
 			onKeyDownEvent.target.value = "";
 		}
 	};
 
 	return (
-		<div>
+		<div className="box">
+			<h1 className="text-center">todos</h1>
 			<input
 				onKeyDown={newTodo}
 				type="text"
 				id="fname"
-				placeholder="Task"
+				placeholder="What needs to be done?"
 				name="fname"></input>
 			<div>
 				<ul>{todo}</ul>
-				<div className="footer">{todo.length} item left</div>
+				<div>
+					<ul className="bg-white">{todo.length} item left</ul>
+				</div>
 			</div>
 		</div>
 	);

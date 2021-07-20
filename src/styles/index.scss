@@ -11,3 +11,80 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+@import "~bootstrap/scss/bootstrap.scss";
+body {
+    background: url(https://www.toptal.com/designers/subtlepatterns/patterns/so-white.png);
+}
+.box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  
+  
+    width: 20%;
+    padding: 10;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h1{
+    padding-bottom: 40px;
+    padding-top: 30px;
+}
+
+.repeating{
+    // display: flex;
+    width: auto;
+  height: auto;
+  margin: 0 auto;
+  padding: 5px;
+  position: relative
+    // margin-left: 70px;
+    // padding: 2px;
+    // width: 80%;
+    // border: 1px black;
+    // height: 80px;
+}
+
+input{
+    margin-left: 70px;
+    width: 80%;
+    height: 80px;
+    border: none;
+}
+
+li {
+    padding-top: 20px;
+    padding-left: 30px;
+    background-color: white;  
+    height: 75px;
+    font-size: 22px;
+    color: gray;
+}
+
+ul {
+    list-style: none;
+    margin: auto;
+    padding: 0%;
+    color:gray;
+}
+
+button {
+    float:right;
+    padding-right: 25px;
+    border: none;
+    background: none;
+    color: gray;
+}
+
+span {
+    float: right;
+}
+
+
+
+

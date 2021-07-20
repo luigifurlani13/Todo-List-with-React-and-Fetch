@@ -13,12 +13,4 @@ import { Home } from "./component/home.js";
 
 //render your react application
 
-let secs = 1;
-
-const interval = setInterval(() => {
-	if (secs == 10) {
-		clearInterval(interval);
-	}
-	ReactDOM.render(<Home seconds={secs} />, document.querySelector("#app"));
-	secs++;
-}, 1000);
+ReactDOM.render(<Home />, document.querySelector("#app"));
