@@ -19,10 +19,22 @@ export function Home() {
 
 	const apiURL =
 		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
+		
+		useEffect(() => {
+			// PUT request using fetch inside useEffect React hook
+			const newdata = {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ title: 'This is a test' })
+			};
+			fetch('https://jsonplaceholder.typicode.com/posts/1', requestOptions)
+				.then(response => response.json())
+				.then(data => setPostId(data.id));
+		console.log(newdata)
 
-	fetch(apiURL)
-		.then(response => response.json())
-		.then(data => console.log(data));
+	// fetch(apiURL)
+	// 	.then(response => response.json())
+	// 	.then(data => console.log(data));
 
 	let todo = variable.map((item, i) => {
 		return (
