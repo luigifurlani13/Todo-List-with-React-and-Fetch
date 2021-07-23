@@ -7,11 +7,7 @@ import { useState, useEffect } from "react";
 //create your first component
 
 export function Home() {
-	const [variable, setVariable] = useState([
-		"Do Homework",
-		"Do Laundry",
-		"Walk the Dog"
-	]);
+	const [todoList, setTodoList] = useState([]);
 	const [isShown, setIsShown] = useState({
 		state: false,
 		index: 0
@@ -19,33 +15,62 @@ export function Home() {
 
 	const apiURL =
 		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
-		
-		useEffect(() => {
-			// PUT request using fetch inside useEffect React hook
-			const newdata = {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title: 'This is a test' })
-			};
-			fetch('https://jsonplaceholder.typicode.com/posts/1', requestOptions)
-				.then(response => response.json())
-				.then(data => setPostId(data.id));
-		console.log(newdata)
+
+	// fetch(apiURL, {
+	// 	method: "PUT",
+	// 	headers: { "Content-Type": "application/json" },
+	// 	body: JSON.stringify({ title: "This is a test" })
+	// })
+	// 	.then(response => response.json())
+	// 	.then(data => console.log(data))
+	// 	.catch(error => console.log("This is an error:", error));
 
 	// fetch(apiURL)
 	// 	.then(response => response.json())
 	// 	.then(data => console.log(data));
 
-	let todo = variable.map((item, i) => {
+	const addTodo = () => {
+		return fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan",
+			{
+				method: "PUT",
+				body: JSON.stringify([
+					{ label: "Make the bed", done: false },
+					{ label: "Walk the dog", done: false },
+					{ label: "Do the replits", done: false }
+				]),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			}
+		)
+			.then(resp => {
+				resp.json();
+			})
+			.then(data => console.log(data));
+	};
+
+	const fetchTodos = () => {
+		fetch(apiURL)
+			.then(response => response.json())
+			.then(todos => setTodoList(todos))
+			.catch(error => ("This is an error:", error));
+	};
+
+	useEffect(() => {
+		fetchTodos();
+	}, []);
+
+	const todo = todoList.map((item, i) => {
 		return (
 			<div className="repeating" key={i}>
 				<li
 					onMouseEnter={() => setIsShown({ state: true, index: i })}
 					onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
-					{item}
+					{item.label}
 
 					{isShown.state === true && isShown.index === i ? (
-						<button setonClick={() => removeItem(i)}>X</button>
+						<button onClick={() => removeItem(i)}>X</button>
 					) : (
 						""
 					)}
@@ -55,15 +80,16 @@ export function Home() {
 	});
 
 	const removeItem = index => {
-		const newArray = variable.filter((item, i) => i != index);
-		setVariable(newArray);
+		const newArray = todoList.filter((item, i) => i != index);
+		setTodoList(newArray);
 	};
 
 	const newTodo = onKeyDownEvent => {
 		if (onKeyDownEvent.keyCode === 13) {
-			let userInput = onKeyDownEvent.target.value;
-			const newTodo = [...variable, userInput];
-			setVariable(newTodo);
+			addTodo();
+			// let userInput = onKeyDownEvent.target.value;
+			// const newTodo = [...todoList, userInput];
+			// setTodoList(newTodo);
 			onKeyDownEvent.target.value = "";
 		}
 	};

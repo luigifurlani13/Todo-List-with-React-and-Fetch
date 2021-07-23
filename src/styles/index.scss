@@ -51,10 +51,15 @@ h1{
 }
 
 input{
-    margin-left: 70px;
-    width: 80%;
-    height: 80px;
-    border: none;
+    width: auto;
+  height: auto;
+  margin: 0 auto;
+  padding: 5px;
+  position: relative
+    // margin-left: 70px;
+    // width: 80%;
+    // height: 80px;
+    // border: none;
 }
 
 li {
