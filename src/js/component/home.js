@@ -106,7 +106,7 @@ export function Home() {
 			<div>
 				<ul>{todo}</ul>
 				<div>
-					<ul className="bg-white">{todo.length} item left</ul>
+					<ul className="counter">{todo.length} item left</ul>
 				</div>
 			</div>
 		</div>
