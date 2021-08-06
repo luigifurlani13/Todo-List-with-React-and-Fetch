@@ -30,36 +30,35 @@ export function Home() {
 	// 	.then(data => console.log(data));
 
 	const addTodo = () => {
-		return fetch(
-			"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan",
-			{
-				method: "PUT",
-				body: JSON.stringify([
-					{ label: "Make the bed", done: false },
-					{ label: "Walk the dog", done: false },
-					{ label: "Do the replits", done: false }
-				]),
-				headers: {
-					"Content-Type": "application/json"
-				}
+		return fetch(apiURL, {
+			method: "PUT",
+			body: JSON.stringify([
+				{ label: "Make the bed", done: false },
+				{ label: "Walk the dog", done: false },
+				{ label: "Do the replits", done: false }
+			]),
+			headers: {
+				"Content-Type": "application/json"
 			}
-		)
-			.then(resp => {
-				resp.json();
-			})
-			.then(data => console.log(data));
+		})
+			.then(resp => resp.json())
+			.then(resp => JSON.stringify(resp));
 	};
 
 	const fetchTodos = () => {
 		fetch(apiURL)
 			.then(response => response.json())
-			.then(todos => setTodoList(todos))
-			.catch(error => ("This is an error:", error));
+			.then(newTodo => setTodoList(newTodo))
+			.catch(error => console.error("This is an error:", error));
 	};
 
 	useEffect(() => {
 		fetchTodos();
-	}, []);
+	}, [todoList]);
+
+	useEffect(() => {
+		addTodo(apiURL, todoList);
+	}, [todoList]);
 
 	const todo = todoList.map((item, i) => {
 		return (
@@ -86,10 +85,9 @@ export function Home() {
 
 	const newTodo = onKeyDownEvent => {
 		if (onKeyDownEvent.keyCode === 13) {
-			addTodo();
-			// let userInput = onKeyDownEvent.target.value;
-			// const newTodo = [...todoList, userInput];
-			// setTodoList(newTodo);
+			let userInput = onKeyDownEvent.target.value;
+			const newTodo = [...todoList, userInput];
+			setTodoList(newTodo);
 			onKeyDownEvent.target.value = "";
 		}
 	};
