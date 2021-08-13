@@ -16,19 +16,6 @@ export function Home() {
 	const apiURL =
 		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
 
-	// fetch(apiURL, {
-	// 	method: "PUT",
-	// 	headers: { "Content-Type": "application/json" },
-	// 	body: JSON.stringify({ title: "This is a test" })
-	// })
-	// 	.then(response => response.json())
-	// 	.then(data => console.log(data))
-	// 	.catch(error => console.log("This is an error:", error));
-
-	// fetch(apiURL)
-	// 	.then(response => response.json())
-	// 	.then(data => console.log(data));
-
 	const addTodo = () => {
 		return fetch(apiURL, {
 			method: "PUT",
@@ -45,6 +32,17 @@ export function Home() {
 			.then(resp => JSON.stringify(resp));
 	};
 
+	const eraseTodo = () => {
+		fetch(apiURL, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(resp => resp.json())
+			.then(resp => console.log(resp));
+	};
+
 	const fetchTodos = () => {
 		fetch(apiURL)
 			.then(response => response.json())
@@ -54,7 +52,7 @@ export function Home() {
 
 	useEffect(() => {
 		fetchTodos();
-	}, [todoList]);
+	}, []);
 
 	useEffect(() => {
 		addTodo(apiURL, todoList);
@@ -86,7 +84,7 @@ export function Home() {
 	const newTodo = onKeyDownEvent => {
 		if (onKeyDownEvent.keyCode === 13) {
 			let userInput = onKeyDownEvent.target.value;
-			const newTodo = [...todoList, userInput];
+			const newTodo = [...todoList, { done: false, label: userInput }];
 			setTodoList(newTodo);
 			onKeyDownEvent.target.value = "";
 		}
@@ -105,6 +103,7 @@ export function Home() {
 				<ul>{todo}</ul>
 				<div>
 					<ul className="counter">{todo.length} item left</ul>
+					{/* <button onClick={() => eraseTodo()}>X</button> */}
 				</div>
 			</div>
 		</div>
