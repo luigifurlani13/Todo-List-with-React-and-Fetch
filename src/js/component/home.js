@@ -1,11 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-//include images into your bundle
-// import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
-
 export function Home() {
 	const [todoList, setTodoList] = useState([]);
 	const [isShown, setIsShown] = useState({
@@ -16,14 +11,17 @@ export function Home() {
 	const apiURL =
 		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
 
+	const fetchTodos = () => {
+		fetch(apiURL)
+			.then(response => response.json())
+			.then(newTodo => setTodoList(newTodo))
+			.catch(error => console.error("This is an error:", error));
+	};
+
 	const addTodo = () => {
 		return fetch(apiURL, {
 			method: "PUT",
-			body: JSON.stringify([
-				{ label: "Make the bed", done: false },
-				{ label: "Walk the dog", done: false },
-				{ label: "Do the replits", done: false }
-			]),
+			body: JSON.stringify(todoList),
 			headers: {
 				"Content-Type": "application/json"
 			}
@@ -32,23 +30,16 @@ export function Home() {
 			.then(resp => JSON.stringify(resp));
 	};
 
-	const eraseTodo = () => {
-		fetch(apiURL, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		})
-			.then(resp => resp.json())
-			.then(resp => console.log(resp));
-	};
-
-	const fetchTodos = () => {
-		fetch(apiURL)
-			.then(response => response.json())
-			.then(newTodo => setTodoList(newTodo))
-			.catch(error => console.error("This is an error:", error));
-	};
+	// const eraseTodo = () => {
+	// 	fetch(apiURL, {
+	// 		method: "DELETE",
+	// 		headers: {
+	// 			"Content-Type": "application/json"
+	// 		}
+	// 	})
+	// 		.then(resp => resp.json())
+	// 		.then(resp => console.log(resp));
+	// };
 
 	useEffect(() => {
 		fetchTodos();
