@@ -1,6 +1,8 @@
 @import "~bootstrap/scss/bootstrap.scss";
 body {
-    background: url(https://www.toptal.com/designers/subtlepatterns/patterns/so-white.png);
+    background: url("https://img.freepik.com/free-vector/halftone-dots-white-background-gray-dots-halftone-texture_47243-1127.jpg?w=2000");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .box {
     position: fixed;
@@ -38,9 +40,6 @@ h1{
 }
 
 input{
-    margin-left: 70px;
-    width: 80%;
-    height: 80px;
     border: none;
 }
 

@@ -11,43 +11,59 @@ export function Home() {
 	const apiURL =
 		"https://assets.breatheco.de/apis/fake/todos/user/luisfurlan";
 
-	const fetchTodos = () => {
-		fetch(apiURL)
-			.then(response => response.json())
-			.then(newTodo => setTodoList(newTodo))
-			.catch(error => console.error("This is an error:", error));
-	};
-
-	const addTodo = () => {
-		return fetch(apiURL, {
-			method: "PUT",
-			body: JSON.stringify(todoList),
-			headers: {
-				"Content-Type": "application/json"
+	const createTodoList = async () => {
+		try {
+			const response = await fetch(apiURL, {
+				method: "POST",
+				body: JSON.stringify(todoList),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			if (response.ok) {
+				const data = await response.json();
 			}
-		})
-			.then(resp => resp.json())
-			.then(resp => JSON.stringify(resp));
+		} catch (error) {
+			throw Error(error);
+		}
 	};
 
-	// const eraseTodo = () => {
-	// 	fetch(apiURL, {
-	// 		method: "DELETE",
-	// 		headers: {
-	// 			"Content-Type": "application/json"
-	// 		}
-	// 	})
-	// 		.then(resp => resp.json())
-	// 		.then(resp => console.log(resp));
-	// };
+	const getTodos = async () => {
+		try {
+			const response = await fetch(apiURL);
+
+			if (response.ok) {
+				const data = await response.json();
+				setTodoList(data);
+				console.log(data);
+			}
+		} catch (error) {
+			throw Error(error);
+		}
+	};
+
+	const addTodo = async () => {
+		try {
+			const response = await fetch(apiURL, {
+				method: "PUT",
+				body: JSON.stringify(todoList),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			if (response.ok) {
+				const data = await response.json();
+				const newArray = [...todoList];
+				setTodoList(newArray);
+			}
+		} catch (error) {
+			throw Error(error);
+		}
+	};
 
 	useEffect(() => {
-		fetchTodos();
+		getTodos();
 	}, []);
-
-	useEffect(() => {
-		addTodo(apiURL, todoList);
-	}, [todoList]);
 
 	const todo = todoList.map((item, i) => {
 		return (
@@ -68,15 +84,15 @@ export function Home() {
 	});
 
 	const removeItem = index => {
-		const newArray = todoList.filter((item, i) => i != index);
+		const newArray = todoList.filter(i => i != index);
 		setTodoList(newArray);
 	};
 
 	const newTodo = onKeyDownEvent => {
 		if (onKeyDownEvent.keyCode === 13) {
 			let userInput = onKeyDownEvent.target.value;
-			const newTodo = [...todoList, { done: false, label: userInput }];
-			setTodoList(newTodo);
+			const allTodos = [...todoList, { done: false, label: userInput }];
+			setTodoList(allTodos);
 			onKeyDownEvent.target.value = "";
 		}
 	};
@@ -84,12 +100,17 @@ export function Home() {
 	return (
 		<div className="box">
 			<h1 className="text-center">todos</h1>
-			<input
-				onKeyDown={newTodo}
-				type="text"
-				id="fname"
-				placeholder="What needs to be done?"
-				name="fname"></input>
+			<li className="d-flex justify-content-between">
+				<input
+					onKeyDown={newTodo}
+					type="text"
+					id="fname"
+					placeholder="What needs to be done?"
+					name="fname"
+				/>
+				<button onClick={addTodo}>Add</button>
+			</li>
+
 			<div>
 				<ul>{todo}</ul>
 				<div>
