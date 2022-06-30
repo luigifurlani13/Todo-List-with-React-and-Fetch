@@ -21,7 +21,7 @@ export function Home() {
 				}
 			});
 			if (response.ok) {
-				const data = await response.json();
+				response.json();
 			}
 		} catch (error) {
 			throw Error(error);
@@ -35,7 +35,6 @@ export function Home() {
 			if (response.ok) {
 				const data = await response.json();
 				setTodoList(data);
-				console.log(data);
 			}
 		} catch (error) {
 			throw Error(error);
@@ -52,9 +51,30 @@ export function Home() {
 				}
 			});
 			if (response.ok) {
-				const data = await response.json();
-				const newArray = [...todoList];
-				setTodoList(newArray);
+				response.json();
+			}
+		} catch (error) {
+			throw Error(error);
+		}
+	};
+
+	const removeItem = index => {
+		const newArray = todoList.filter(i => i != index);
+		setTodoList(newArray);
+	};
+
+	const removeTodo = async i => {
+		try {
+			const response = await fetch(apiURL, {
+				method: "DELETE",
+				body: JSON.stringify(todoList),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			if (response.ok) {
+				response.json();
+				removeItem(i);
 			}
 		} catch (error) {
 			throw Error(error);
@@ -74,7 +94,7 @@ export function Home() {
 					{item.label}
 
 					{isShown.state === true && isShown.index === i ? (
-						<button onClick={() => removeItem(i)}>X</button>
+						<button onClick={() => removeTodo(i)}>X</button>
 					) : (
 						""
 					)}
@@ -82,11 +102,6 @@ export function Home() {
 			</div>
 		);
 	});
-
-	const removeItem = index => {
-		const newArray = todoList.filter(i => i != index);
-		setTodoList(newArray);
-	};
 
 	const newTodo = onKeyDownEvent => {
 		if (onKeyDownEvent.keyCode === 13) {
@@ -108,7 +123,9 @@ export function Home() {
 					placeholder="What needs to be done?"
 					name="fname"
 				/>
-				<button onClick={addTodo}>Add</button>
+				<button type="submit" onClick={addTodo}>
+					Add
+				</button>
 			</li>
 
 			<div>
