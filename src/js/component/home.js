@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import ScrollToTop from "./scrollToTop";
 
 export function Home() {
 	const [todoList, setTodoList] = useState([]);
@@ -52,29 +53,28 @@ export function Home() {
 			});
 			if (response.ok) {
 				response.json();
+				location.reload();
 			}
 		} catch (error) {
 			throw Error(error);
 		}
 	};
 
-	const removeItem = index => {
-		const newArray = todoList.filter(i => i != index);
-		setTodoList(newArray);
-	};
-
 	const removeTodo = async i => {
 		try {
+			const newArray = [...todoList];
+			newArray.splice(i, 1);
+			setTodoList(newArray);
 			const response = await fetch(apiURL, {
-				method: "DELETE",
-				body: JSON.stringify(todoList),
+				method: "PUT",
+				body: JSON.stringify(newArray),
 				headers: {
 					"Content-Type": "application/json"
 				}
 			});
 			if (response.ok) {
 				response.json();
-				removeItem(i);
+				location.reload();
 			}
 		} catch (error) {
 			throw Error(error);
@@ -94,7 +94,9 @@ export function Home() {
 					{item.label}
 
 					{isShown.state === true && isShown.index === i ? (
-						<button onClick={() => removeTodo(i)}>X</button>
+						<button type="submit" onClick={() => removeTodo(i)}>
+							X
+						</button>
 					) : (
 						""
 					)}
@@ -113,28 +115,29 @@ export function Home() {
 	};
 
 	return (
-		<div className="box">
-			<h1 className="text-center">todos</h1>
-			<li className="d-flex justify-content-between">
-				<input
-					onKeyDown={newTodo}
-					type="text"
-					id="fname"
-					placeholder="What needs to be done?"
-					name="fname"
-				/>
-				<button type="submit" onClick={addTodo}>
-					Add
-				</button>
-			</li>
+		<ScrollToTop>
+			<div className="box">
+				<h1 className="text-center">todos</h1>
+				<li className="d-flex justify-content-between">
+					<input
+						onKeyDown={newTodo}
+						type="text"
+						id="fname"
+						placeholder="What needs to be done?"
+						name="fname"
+					/>
+					<button type="submit" onClick={addTodo}>
+						Add
+					</button>
+				</li>
 
-			<div>
-				<ul>{todo}</ul>
 				<div>
-					<ul className="counter">{todo.length} item left</ul>
-					{/* <button onClick={() => eraseTodo()}>X</button> */}
+					<ul>{todo}</ul>
+					<div>
+						<ul className="counter">{todo.length} item left</ul>
+					</div>
 				</div>
 			</div>
-		</div>
+		</ScrollToTop>
 	);
 }
